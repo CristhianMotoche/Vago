@@ -5,9 +5,9 @@ author:             CristhianMotoche
 maintainer:         cristhian.motoche@gmail.com
 extra-source-files: CHANGELOG.md
 
-executable vago
+executable v
   main-is:          Main.hs
-  build-depends:    base ^>=4.14.1.0
+  build-depends:    base ^>=4.14.1.0, vago
   hs-source-dirs:   app
   default-language: Haskell2010
 

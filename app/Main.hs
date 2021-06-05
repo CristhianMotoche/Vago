@@ -1,4 +1,7 @@
 module Main where
 
+import Dummy
+
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = 
+  print =<< dice

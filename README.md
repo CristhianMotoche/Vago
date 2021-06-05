@@ -7,3 +7,9 @@ A simple tool to automate my common tasks.
 ```
 cabal build
 ```
+
+## Run
+
+```
+cabal exec v
+```
