@@ -13,7 +13,6 @@ executable v
 
 library
   exposed-modules:
-    Dummy,
     Config
   build-depends:
     base ^>=4.14.1.0,
