@@ -1,17 +1,22 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Config (Config(..), readConfig) where
+module Config (Config(..), HarvestConfig(..), readConfig) where
 
 import System.Environment (getEnv)
 
+
 data Config = Config
-  { harvestID :: String
-  , harvestToken :: String
+  { harvest :: HarvestConfig
   }
 
+data HarvestConfig = HarvestConfig
+  { id :: String
+  , token :: String
+  }
 
 readConfig :: IO Config
 readConfig = do
-  harvestID <- getEnv "HARVEST_ID"
-  harvestToken <- getEnv "HARVEST_TOKEN"
+  id <- getEnv "HARVEST_ID"
+  token <- getEnv "HARVEST_TOKEN"
+  harvest <- return HarvestConfig{..}
   return Config{..}
