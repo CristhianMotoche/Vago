@@ -11,12 +11,13 @@ import qualified Data.ByteString.Char8 as B
 
 
 endpoint :: HarvestConfig -> Request
-endpoint (HarvestConfig {..}) = "https://api.harvestapp.com/api/v2"
+endpoint (HarvestConfig {..}) = "https://api.harvestapp.com/api/v2/users/me.json"
   { method = "GET"
   , secure = True
   , requestHeaders = [
-      ("Content-type", "application/json; charset=utf-8"),
-      ("Authorization", "Bearer " <> B.pack token)
+      ("User-Agent", "API CLI"),
+      ("Authorization", "Bearer " <> B.pack token),
+      ("Harvest-Account-ID", (B.pack . show) id)
   ]
   }
 

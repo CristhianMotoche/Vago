@@ -7,16 +7,16 @@ import System.Environment (getEnv)
 
 data Config = Config
   { harvest :: HarvestConfig
-  }
+  } deriving Show
 
 data HarvestConfig = HarvestConfig
-  { id :: String
+  { id :: Int
   , token :: String
-  }
+  } deriving Show
 
 readConfig :: IO Config
 readConfig = do
-  id <- getEnv "HARVEST_ID"
+  id <- read <$> getEnv "HARVEST_ID"
   token <- getEnv "HARVEST_TOKEN"
   harvest <- return HarvestConfig{..}
   return Config{..}
