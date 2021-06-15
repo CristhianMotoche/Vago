@@ -11,7 +11,7 @@ import qualified Data.ByteString.Char8 as B
 
 
 endpoint :: HarvestConfig -> Request
-endpoint (HarvestConfig {..}) = "https://api.harvestapp.com/api/v2/users/me.json"
+endpoint (HarvestConfig {..}) = "https://api.harvestapp.com/api/v2/time_entries"
   { method = "GET"
   , secure = True
   , requestHeaders = [
