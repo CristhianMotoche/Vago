@@ -10,15 +10,19 @@ import Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Char8 as B
 
 
+apiDomain :: Request
+apiDomain =  "https://api.harvestapp.com"
+
 endpoint :: HarvestConfig -> Request
-endpoint (HarvestConfig {..}) = "https://api.harvestapp.com/api/v2/time_entries"
+endpoint (HarvestConfig {..}) = apiDomain
   { method = "GET"
   , secure = True
   , requestHeaders = [
-      ("User-Agent", "API CLI"),
+      ("User-Agent", "Vago API CLI"),
       ("Authorization", "Bearer " <> B.pack token),
       ("Harvest-Account-ID", (B.pack . show) id)
-  ]
+    ]
+  , path = "/api/v2/users/1065791/project_assignments"
   }
 
 listTasks :: HarvestConfig -> IO ByteString
