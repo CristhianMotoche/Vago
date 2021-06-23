@@ -1,7 +1,7 @@
 module Main where
 
 import Config as C
-import Harvest (listTasks)
+import Harvest (postTask)
 import System.Environment (getArgs)
 import System.Exit (die)
 
@@ -25,5 +25,5 @@ main = do
   then die "Requires: ProjectID, TaskID, and description"
   else do
     print $ mkArgs args
-    tasks <- listTasks $ C.harvest config
+    tasks <- postTask $ C.harvest config
     print tasks
