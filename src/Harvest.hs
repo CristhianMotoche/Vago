@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Harvest (postTask) where
+module Harvest (TimeEntryInput(..), postTask) where
 
 import Config (HarvestConfig(..))
 import Data.Aeson as A
@@ -21,7 +21,7 @@ instance A.ToJSON TimeEntryInput where
     A.object
     [ "project_id" A..= projectId
     , "task_id" A..= taskId
-    , "spend_date" A..= ("20210623" :: String)
+    , "spent_date" A..= ("2021-06-23" :: String)
     ]
 
 apiDomain :: Request
@@ -41,9 +41,8 @@ endpoint timeEntry (HarvestConfig {..}) = apiDomain
   , requestBody = RequestBodyLBS $ encode timeEntry
   }
 
-postTask :: HarvestConfig -> IO ByteString
-postTask config = do
-  let dummyEntry = TimeEntryInput 1 2 "3"
+postTask :: TimeEntryInput -> HarvestConfig -> IO ByteString
+postTask entry config = do
   man <- TLS.newTlsManager
-  resp <- httpLbs (endpoint dummyEntry config) man
+  resp <- httpLbs (endpoint entry config) man
   return $ responseBody resp
