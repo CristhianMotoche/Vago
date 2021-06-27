@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Harvest (TimeEntryInput(..), postTask) where
+module Harvest (TimeEntryInput(..), postTask, getTask) where
 
 import Config (HarvestConfig(..))
 import Data.Aeson as A
@@ -14,21 +14,26 @@ data TimeEntryInput = TimeEntryInput
   { projectId :: Int
   , taskId :: Int
   , spendDate :: String
+  , description :: String
   } deriving (Show)
+
+testingDate :: String
+testingDate = "2021-06-25"
 
 instance A.ToJSON TimeEntryInput where
   toJSON TimeEntryInput{..} =
     A.object
     [ "project_id" A..= projectId
     , "task_id" A..= taskId
-    , "spent_date" A..= ("2021-06-23" :: String)
+    , "spent_date" A..= testingDate
+    , "notes" A..= description
     ]
 
 apiDomain :: Request
 apiDomain =  "https://api.harvestapp.com"
 
-endpoint :: TimeEntryInput -> HarvestConfig -> Request
-endpoint timeEntry (HarvestConfig {..}) = apiDomain
+postTimeEntries :: TimeEntryInput -> HarvestConfig -> Request
+postTimeEntries timeEntry (HarvestConfig {..}) = apiDomain
   { method = "POST"
   , secure = True
   , requestHeaders = [
@@ -41,8 +46,30 @@ endpoint timeEntry (HarvestConfig {..}) = apiDomain
   , requestBody = RequestBodyLBS $ encode timeEntry
   }
 
+
+getTimeEntries :: HarvestConfig -> Request
+getTimeEntries (HarvestConfig {..}) = apiDomain
+  { method = "GET"
+  , secure = True
+  , requestHeaders = [
+      ("User-Agent", "Vago API CLI"),
+      ("Content-Type", "application/json"),
+      ("Authorization", "Bearer " <> B.pack token),
+      ("Harvest-Account-ID", (B.pack . show) id)
+    ]
+  , path = "/api/v2/time_entries"
+  , queryString = B.pack $ "from=" <> testingDate
+  }
+
+
 postTask :: TimeEntryInput -> HarvestConfig -> IO ByteString
 postTask entry config = do
   man <- TLS.newTlsManager
-  resp <- httpLbs (endpoint entry config) man
+  resp <- httpLbs (postTimeEntries entry config) man
+  return $ responseBody resp
+
+getTask :: HarvestConfig -> IO ByteString
+getTask config = do
+  man <- TLS.newTlsManager
+  resp <- httpLbs (getTimeEntries config) man
   return $ responseBody resp

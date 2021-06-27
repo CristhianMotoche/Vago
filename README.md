@@ -37,3 +37,15 @@ the [executable and the library at the same time](https://www.reddit.com/r/haske
 ```
 cabal exec v
 ```
+
+## TODO:
+### Phase 1
+- [x] Authentication
+- [x] Start new times
+- [x] List current tasks
+
+### Phase 2
+- [ ] Read common project and tasks from a file
+- [ ] Alist to start new event
+- [ ] Stop current task
+- [ ] Restart one of he listed tasks
